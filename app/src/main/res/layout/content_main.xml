@@ -10,10 +10,51 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.soundless.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_main"
+    android:background="@color/purple">
 
-    <TextView
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Sync"
+        android:id="@+id/button3"
+        android:layout_marginBottom="109dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/green"
+        android:contextClickable="false"
+        android:textColor="@color/purple" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView2"
+        android:src="@drawable/splashscreen"
+        android:layout_marginBottom="305dp"
+        android:layout_above="@+id/button3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username"
+        android:id="@+id/button"
+        android:layout_alignTop="@+id/imageView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="163dp"
+        android:backgroundTint="@color/green"
+        android:textColor="@color/purple" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password"
+        android:id="@+id/button2"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/green"
+        android:textColor="@color/purple" />
+
 </RelativeLayout>
