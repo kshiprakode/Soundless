@@ -61,6 +61,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, EasyPermissions.PermissionCallbacks{
 
     private boolean busy = false;
+    boolean isEvent = false;
     AudioManager audiomanage;
 
     GoogleAccountCredential mCredential;
