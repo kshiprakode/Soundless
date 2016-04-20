@@ -36,25 +36,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Username"
-        android:id="@+id/button"
-        android:layout_alignTop="@+id/imageView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="163dp"
-        android:backgroundTint="@color/green"
-        android:textColor="@color/purple" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Password"
-        android:id="@+id/button2"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:backgroundTint="@color/green"
-        android:textColor="@color/purple" />
+        android:text="View"
+        android:id="@+id/mOutputText"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="148dp" />
 
 </RelativeLayout>
