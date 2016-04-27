@@ -26,15 +26,15 @@
         android:contextClickable="false"
         android:textColor="@color/purple" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView2"
-        android:src="@drawable/splashscreen"
-        android:layout_marginBottom="305dp"
-        android:layout_above="@+id/button3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/imageView2"-->
+        <!--android:src="@drawable/splashscreen"-->
+        <!--android:layout_marginBottom="305dp"-->
+        <!--android:layout_above="@+id/button3"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true" />-->
 
     <TextView
         android:layout_width="wrap_content"
