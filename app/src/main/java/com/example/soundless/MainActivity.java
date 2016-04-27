@@ -157,6 +157,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //audiomanage.setRingerMode(AudioManager.RINGER_MODE_SILENT);
                 //audiomanage.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                 Intent intent = new Intent(this,Sync.class);
+                //once function in place, want something where its like
+                //if(currentEvent() == true)
+                //audiomanage.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                //to instantly set phone to silent if needed
+
                 startActivity(intent);
         }
     }
