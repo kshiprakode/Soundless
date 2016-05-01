@@ -112,7 +112,7 @@ public class BackgroundService extends Service {
 
                 if (start == null || end == null) continue;
 
-// Implement Here.
+                // Implement Here.
             }
             return eventStrings;
         }
@@ -134,7 +134,7 @@ public class BackgroundService extends Service {
 //                mOutputText.setText(TextUtils.join("\n", output));
             }
         }
-
+        // What are we doing with this?
         @Override
         protected void onCancelled() {
 //            mProgress.hide();
