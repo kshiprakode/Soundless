@@ -14,13 +14,13 @@ import java.util.List;
 
 public class CustomAdapter extends BaseAdapter{
     List<String> eventNames;
-    List<DateTime> eventTime;
+    List<String> eventTime;
     List<String> eventLocations;
     Context context;
     int [] imageId;
 
     private static LayoutInflater inflater=null;
-    public CustomAdapter(com.example.soundless.MainActivity mainActivity, List<String> eventNames1, List<DateTime> eventTime1, List<String> eventLocation1) {
+    public CustomAdapter(com.example.soundless.MainActivity mainActivity, List<String> eventNames1, List<String> eventTime1, List<String> eventLocation1) {
         // TODO Auto-generated constructor stub
         eventNames=eventNames1;
         context=mainActivity;
@@ -62,6 +62,7 @@ public class CustomAdapter extends BaseAdapter{
         holder.time=(TextView) rowView.findViewById(R.id.EventTime);
 
         holder.name.setText(eventNames.get(position));
+        if(eventTime.get(position)!=null)
         holder.time.setText(eventTime.get(position).toString());
         holder.location.setText(eventLocations.get(position));
 

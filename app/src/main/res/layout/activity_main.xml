@@ -4,23 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/purple"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:paddingBottom="18dp">
 
     <ImageView
-        android:layout_width="799dp"
-        android:layout_height="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:id="@+id/imageView"
         android:contentDescription="@string/ImageDescription"
         android:src="@drawable/applogo"
         android:layout_gravity="center"
-        android:layout_weight="0.03" />
+        android:layout_weight="1" />
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="396dp"
+        android:layout_height="wrap_content"
         android:id="@+id/listView"
         android:layout_gravity="center_horizontal"
-        android:background="@color/purpleDark"/>
+        android:background="@color/purpleDark"
+        android:layout_weight="1"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,6 +38,16 @@
         android:id="@+id/buttonApi"
         android:background="@color/green"
         android:textColor="@color/purple"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:layout_weight="1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/content"
+        android:background="@color/green"
+        android:textColor="@color/purple"
+        android:layout_gravity="center"
+        android:layout_weight="1" />
 
 </LinearLayout>

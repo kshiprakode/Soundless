@@ -26,6 +26,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -35,6 +36,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -44,6 +46,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -66,9 +70,9 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     private boolean busy = false;
 
     List<String> eventNames;
-    List<DateTime> eventTimes;
+    List<String> eventTimes;
     List<String> eventLocations;
-
+    TextView cnt;
     Handler handle;
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
@@ -113,6 +117,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
 
         busy = false;
         audiomanager = (AudioManager)getSystemService(this.AUDIO_SERVICE);
+        cnt= (TextView) findViewById(R.id.content);
         getResultsFromApi();
     }
 
@@ -265,8 +270,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
      * @return true if the device has a network connection, false otherwise.
      */
     private boolean isDeviceOnline() {
-        ConnectivityManager connMgr =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
     }
@@ -356,9 +360,12 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         private List<String> getDataFromApi() throws IOException {
             // List the next 10 events from the primary calendar.
             DateTime now = new DateTime(System.currentTimeMillis());
+            Date today = new Date();
+
+
             List<String> eventStrings = new ArrayList<String>();
             eventLocations = new ArrayList<String>();
-            eventTimes = new ArrayList<DateTime>();
+            eventTimes = new ArrayList<String>();
             eventNames = new ArrayList<String>();
             Events events = mService.events().list("primary")
                     .setMaxResults(10)
@@ -370,14 +377,36 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
 
             for (Event event : items) {
                 eventNames.add(event.getSummary());
-                eventTimes.add(event.getStart().getDateTime());
+                eventTimes.add(event.getStart().getDateTime() + " to " + event.getEnd().getDateTime());
                 eventLocations.add(event.getLocation());
                 DateTime start = event.getStart().getDateTime();
+                DateTime end = event.getEnd().getDateTime();
+
+
                 if (start == null) {
                     // All-day events don't have start times, so just use
                     // the start date.
                     start = event.getStart().getDate();
                 }
+                if (end == null) {
+                    // All-day events don't have start times, so just use
+                    // the start date.
+                    end = event.getEnd().getDate();
+                }
+
+                if(start == null || end == null) {
+                    Log.d("Error", "Error!");
+                    continue;
+                }
+
+                if(now.getValue() > start.getValue() + start.getTimeZoneShift() && now.getValue() < end.getValue()+end.getTimeZoneShift())
+                {
+                    busy = true;
+
+                    //listView.setBackgroundColor(Color.GRAY);
+                    //Toast.makeText(MainActivity.this, "now busy", Toast.LENGTH_SHORT).show();
+                }
+
 
                 eventStrings.add(
                         String.format("%s (%s)\n", event.getSummary(), start));
