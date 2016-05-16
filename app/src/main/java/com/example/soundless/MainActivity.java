@@ -101,10 +101,6 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
 
         listView=(ListView)findViewById(R.id.listView);
         mOutputText = (TextView)findViewById(R.id.outputText);
-        //mProgress = new ProgressDialog(this);
-        //mProgress.setMessage("Calling Google Calendar API ...");
-
-        // Initialize credentials and service object.
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
@@ -465,8 +461,6 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         mOutputText.setText("");
         getResultsFromApi();
         mCallApiButton.setEnabled(true);
-
-//        mCallApiButton.setText(String.valueOf(busy));
 
         if(busy){
             audiomanager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
