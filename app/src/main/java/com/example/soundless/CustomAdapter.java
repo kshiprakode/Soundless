@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.google.api.client.util.DateTime;
-
 import java.util.List;
 
 public class CustomAdapter extends BaseAdapter{
@@ -17,7 +15,6 @@ public class CustomAdapter extends BaseAdapter{
     List<String> eventTime;
     List<String> eventLocations;
     Context context;
-    int [] imageId;
 
     private static LayoutInflater inflater=null;
     public CustomAdapter(com.example.soundless.MainActivity mainActivity, List<String> eventNames1, List<String> eventTime1, List<String> eventLocation1) {

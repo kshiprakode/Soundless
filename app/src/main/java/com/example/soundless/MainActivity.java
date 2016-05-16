@@ -1,3 +1,18 @@
+/*
+
+Soundless - Application that automatically changes the profile of the phone based on the Google Calendar events.
+
+Team Adroit -
+  Joseph Daniels 
+  Kshipra Kode 
+  Oladipupo Eke
+  Mark Pileggi
+  Monica William-Henein
+
+ Date : 18th May 2016
+
+ */
+
 package com.example.soundless;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -16,7 +31,6 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.client.util.DateTime;
 
 import com.google.api.services.calendar.model.*;
-import com.google.common.collect.ArrayListMultimap;
 
 import android.Manifest;
 import android.accounts.AccountManager;
@@ -26,7 +40,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -34,21 +47,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -61,11 +65,10 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends Activity implements EasyPermissions.PermissionCallbacks, View.OnClickListener {
+
     GoogleAccountCredential mCredential;
     private TextView mOutputText;
     private Button mCallApiButton;
-    ProgressDialog mProgress;
-    boolean isEvent = false;
     AudioManager audiomanager;
     private boolean busy = false;
 
@@ -73,19 +76,15 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     List<String> eventTimes;
     List<String> eventLocations;
     TextView cnt;
-    Handler handle;
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
-    private static final String BUTTON_TEXT = "Call Google Calendar API";
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
-    ArrayList<Event> list;
     ListView listView;
-    ArrayAdapter arrayAdapter;
 
     /**
      * Create the main activity.
@@ -350,6 +349,8 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                 cancel(true);
                 return null;
             }
+
+
         }
 
         /**
@@ -465,26 +466,15 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         getResultsFromApi();
         mCallApiButton.setEnabled(true);
 
+//        mCallApiButton.setText(String.valueOf(busy));
+
         if(busy){
-            busy = false;
-            //Amanage.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-            audiomanager.setRingerMode(AudioManager.MODE_RINGTONE);
-            //myHandler.post(new busyWork());
-            Toast.makeText(MainActivity.this,"Now in Silent Mode",Toast.LENGTH_LONG).show();
+            audiomanager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
         }
         if(!busy){
-            busy = true;
-            //Amanage.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-            audiomanager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-            Toast.makeText(MainActivity.this,"Now in Vibrate Mode", Toast.LENGTH_LONG).show();
-            //myHandler.post(new busyWork());
+            audiomanager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         }
     }
 }
 
-/*
-//Things to do
-1) Silent Ringer switching
-2) App Logo
-5) Service
-*/
+
