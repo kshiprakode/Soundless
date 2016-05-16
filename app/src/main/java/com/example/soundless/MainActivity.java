@@ -361,7 +361,6 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
             DateTime now = new DateTime(System.currentTimeMillis());
             Date today = new Date();
 
-
             List<String> eventStrings = new ArrayList<String>();
             eventLocations = new ArrayList<String>();
             eventTimes = new ArrayList<String>();
@@ -458,10 +457,8 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         }
     }
 
-    public void onClick(View v) {
-        mCallApiButton.setEnabled(false);
-        mOutputText.setText("");
-        getResultsFromApi();
+
+    void changeProfile(){
         mCallApiButton.setEnabled(true);
 
         if(busy){
@@ -470,9 +467,14 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         if(!busy){
             audiomanager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         }
+
     }
-
-
+    public void onClick(View v) {
+        mCallApiButton.setEnabled(false);
+        mOutputText.setText("");
+        getResultsFromApi();
+        changeProfile();
+    }
 
     public void callAsynchronousTask() {
         final Handler handler = new Handler();
@@ -483,9 +485,8 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                 handler.post(new Runnable() {
                     public void run() {
                         try {
-                            PerformBackgroundTask performBackgroundTask = new PerformBackgroundTask();
-                            // PerformBackgroundTask this class is the class that extends AsynchTask
-                            performBackgroundTask.execute();
+
+
                         } catch (Exception e) {
                             // TODO Auto-generated catch block
                         }
@@ -495,10 +496,6 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         };
         timer.schedule(doAsynchronousTask, 0, 50000); //execute in every 50000 ms
     }
-
-
-
-
 }
 
 
