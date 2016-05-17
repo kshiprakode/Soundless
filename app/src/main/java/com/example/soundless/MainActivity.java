@@ -53,6 +53,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -103,6 +105,10 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
 
         listView=(ListView)findViewById(R.id.listView);
         mOutputText = (TextView)findViewById(R.id.outputText);
+        //mProgress = new ProgressDialog(this);
+        //mProgress.setMessage("Calling Google Calendar API ...");
+
+        // Initialize credentials and service object.
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
@@ -134,6 +140,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
             mOutputText.setText("No network connection available.");
         } else {
             new MakeRequestTask(mCredential).execute();
+
         }
     }
 
@@ -324,7 +331,32 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         private com.google.api.services.calendar.Calendar mService = null;
         private Exception mLastError = null;
 
+
         public MakeRequestTask(GoogleAccountCredential credential) {
+
+            final Handler handler = new Handler();
+            Timer timer = new Timer();
+            TimerTask doAsynchronousTask = new TimerTask() {
+                @Override
+                public void run() {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            try {
+                                Toast.makeText(MainActivity.this, "AsyncTask working...", Toast.LENGTH_SHORT).show();
+                                getDataFromApi();
+
+                            } catch (Exception e) {
+                                // TODO Auto-generated catch block
+                            }
+                        }
+                    });
+                }
+            };
+            //timer.schedule(doAsynchronousTask, 0, 600000); //execute in every 10 minutes, or 600000 ms
+            timer.schedule(doAsynchronousTask, 0, 10000); //execute in every 10 minutes, or 600000 ms
+
+
+
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mService = new com.google.api.services.calendar.Calendar.Builder(
@@ -333,13 +365,15 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                     .build();
         }
 
+
         /**
          * Background task to call Google Calendar API.
+         *
          * @param params no parameters needed for this task.
          */
 
         @Override
-        protected List<String> doInBackground(Void... params) {
+        public List<String> doInBackground(Void... params) {
             try {
                 return getDataFromApi();
             } catch (Exception e) {
@@ -353,13 +387,15 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
 
         /**
          * Fetch a list of the next 10 events from the primary calendar.
+         *
          * @return List of Strings describing returned events.
          * @throws IOException
          */
-        private List<String> getDataFromApi() throws IOException {
+        public List<String> getDataFromApi() throws IOException {
             // List the next 10 events from the primary calendar.
             DateTime now = new DateTime(System.currentTimeMillis());
             Date today = new Date();
+
 
             List<String> eventStrings = new ArrayList<String>();
             eventLocations = new ArrayList<String>();
@@ -392,13 +428,12 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                     end = event.getEnd().getDate();
                 }
 
-                if(start == null || end == null) {
+                if (start == null || end == null) {
                     Log.d("Error", "Error!");
                     continue;
                 }
 
-                if(now.getValue() > start.getValue() + start.getTimeZoneShift() && now.getValue() < end.getValue()+end.getTimeZoneShift())
-                {
+                if (now.getValue() > start.getValue() + start.getTimeZoneShift() && now.getValue() < end.getValue() + end.getTimeZoneShift()) {
                     busy = true;
 
                     //listView.setBackgroundColor(Color.GRAY);
@@ -451,15 +486,23 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                     mOutputText.setText(error);
                 }
             } else {
-                String error=  "Request cancelled.";
+                String error = "Request cancelled.";
                 mOutputText.setText(error);
             }
         }
     }
 
 
-    void changeProfile(){
+
+
+
+    public void onClick(View v) {
+        mCallApiButton.setEnabled(false);
+        mOutputText.setText("");
+        getResultsFromApi();
         mCallApiButton.setEnabled(true);
+
+//        mCallApiButton.setText(String.valueOf(busy));
 
         if(busy){
             audiomanager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
@@ -467,35 +510,16 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         if(!busy){
             audiomanager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         }
-
-    }
-    public void onClick(View v) {
-        mCallApiButton.setEnabled(false);
-        mOutputText.setText("");
-        getResultsFromApi();
-        changeProfile();
     }
 
-    public void callAsynchronousTask() {
-        final Handler handler = new Handler();
-        Timer timer = new Timer();
-        TimerTask doAsynchronousTask = new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    public void run() {
-                        try {
 
 
-                        } catch (Exception e) {
-                            // TODO Auto-generated catch block
-                        }
-                    }
-                });
-            }
-        };
-        timer.schedule(doAsynchronousTask, 0, 50000); //execute in every 50000 ms
-    }
+
+
+
+
+
+
 }
 
 
