@@ -15,8 +15,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="Google Calendar API Android Quickstart">
-        </activity>
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:label="Google Calendar API Android Quickstart"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -25,12 +26,21 @@
         <activity
             android:name=".SplashScreen"
             android:label="@string/title_activity_splash_screen"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".BackgroundService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="" />
     </application>
 
 </manifest>

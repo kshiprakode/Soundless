@@ -3,9 +3,21 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:layout_gravity="center_vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cal_01"
+        android:paddingRight="15dp"
+        android:paddingLeft="5dp"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/application_logo_description"
+        android:id="@+id/iconCalender"/>
 
     <LinearLayout
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -20,6 +32,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/EventTime"
+        android:textColor="@color/green"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/EventTimeEnd"
         android:textColor="@color/green"/>
 
     <TextView

@@ -5,30 +5,26 @@
     android:layout_height="match_parent"
     android:background="@color/purple"
     android:weightSum="1"
-    android:paddingBottom="18dp">
+    android:paddingBottom="10dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/image_height"
         android:id="@+id/imageView"
         android:contentDescription="@string/ImageDescription"
         android:src="@drawable/applogo"
         android:layout_gravity="center"
-        android:layout_weight="1" />
+        android:padding="@dimen/image_padding"/>
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:id="@+id/listView"
         android:layout_gravity="center_horizontal"
-        android:background="@color/purpleDark" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/outputText"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/green"/>
+        android:background="@color/purpleDark"
+        android:layout_weight="1" />
 
     <Button
         android:layout_width="wrap_content"
@@ -37,16 +33,7 @@
         android:id="@+id/buttonApi"
         android:background="@color/green"
         android:textColor="@color/purple"
-        android:layout_gravity="center"
-        android:layout_weight="1" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/content"
-        android:background="@color/green"
-        android:textColor="@color/purple"
-        android:layout_gravity="center"
-        android:layout_weight="1" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/button_top_padding"/>
 
 </LinearLayout>

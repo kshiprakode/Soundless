@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">Soundless2</string>
-    <string name="title_activity_splash_screen">SplashScreen</string>
-    <string name="buttonNameSync">Sync</string>
-    <string name="ImageDescription">Logo</string>
-    <string name="soundless_logo">SoundLess Logo</string>
-</resources>
