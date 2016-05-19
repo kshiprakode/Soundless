@@ -8,23 +8,21 @@
  *    Oladipupo Eke
  *    Mark Pileggi
  *  Designer:
- *    Monical Welliams
+ *    Monica Williams
 
- * Date : 18th May 2016
+ * Date : 19th May 2016
 
- //Service Functionality
- //Icons
- //Other things like service on off
- //Settings
 **/
-
 
 package com.example.soundless;
 
+//Application Imports
 import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.NotificationManager;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,6 +34,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -65,33 +64,84 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+
 public class MainActivity extends Activity implements EasyPermissions.PermissionCallbacks, View.OnClickListener {
 
+    //Local variables for enabling google services
     GoogleAccountCredential mCredential;
-    AudioManager audiomanager;
-    private boolean busy = false;
     private com.google.api.services.calendar.Calendar mService = null;
-    private DateTime now;
-    private List<String> eventNames;
-    private List<String> eventTimeStart;
-    private List<String> eventTimeEnd;
-    private List<String> eventLocations;
-    private List<Event> items;
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
-    ListView listView;
 
+    //Local variables for managing audio services
+    AudioManager audiomanager;
+    private boolean previousbusy;
+    private boolean busy = false;
+
+    //Local Variables for entering data from events to the listview
+    ListView listView;
+    private DateTime now;
+    private List<String> eventNames;
+    private List<String> eventTimeStart;
+    private List<String> eventTimeEnd;
+    private List<String> eventLocations;
+    private List<Event> items;
+
+    private static final int notificationID = 1000001;
+
+    /**
+     * Create the main activity.
+     * @param savedInstanceState previously saved instance data.
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Button mCallApiButton = (Button) findViewById(R.id.buttonApi);
+        mCallApiButton.setOnClickListener(this);
+        listView=(ListView)findViewById(R.id.listView);
+
+        // Initialize credentials and service object.
+        mCredential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Arrays.asList(SCOPES))
+                .setBackOff(new ExponentialBackOff());
+
+        //On creating of the Application Activity, the user is not busy, thus, busy is off
+        busy = false;
+
+        //Set the custom type face for the Sync button
+        Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/IrmaTextRoundStd-SemiBold copy.ttf");
+        mCallApiButton.setTypeface(customFont);
+        audiomanager = (AudioManager)getSystemService(AUDIO_SERVICE);
+
+
+        Toast.makeText(MainActivity.this,"Soundless is fetching your events...",Toast.LENGTH_LONG).show();
+
+        getResultsFromApi();
+        actionSync();
+
+        //Call the handler to check if there is an active event
+        handler.post(runnableCode);
+
+    }
+
+    //Handler that checks the google calendar API for current events and if any new events are created
     Handler handler = new Handler();
     // Define the code block to be executed
     private Runnable runnableCode = new Runnable() {
         @Override
         public void run() {
+
             now = new DateTime(System.currentTimeMillis());
             Events events = null;
+
+            //Pulls next 10 events in the google calender
             if(mService!=null){
                 try {
 
@@ -103,15 +153,20 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                             .execute();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    e.printStackTrace();
                 }
-                    assert events != null;
-                    items = events.getItems();
+                assert events != null;
+                items = events.getItems();
+
                 List<String> eventStrings = new ArrayList<>();
                 eventLocations = new ArrayList<>();
                 eventTimeStart = new ArrayList<>();
                 eventTimeEnd = new ArrayList<>();
                 eventNames = new ArrayList<>();
+
                 busy=false;
+
+                //Parses through each event adding the contents to list view and also checking if there are events running currently
                 for (Event event : items) {
 
                     eventNames.add(event.getSummary());
@@ -136,7 +191,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                         Log.d("Error", "Error!");
                         continue;
                     }
-
+                    //Current event found, busy is set to true
                     if (now.getValue() > start.getValue() + start.getTimeZoneShift() && now.getValue() < end.getValue() + end.getTimeZoneShift()) {
                         busy = true;
                         break;
@@ -149,6 +204,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                             String.format("%s (%s)\n", event.getSummary(), start));
                 }
             }
+            //Call the audio updater and notification manager
             actionSync();
             handler.postDelayed(runnableCode, 10000);
         }
@@ -157,52 +213,12 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
 
 
     /**
-     * Create the main activity.
-     * @param savedInstanceState previously saved instance data.
-     */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Button mCallApiButton = (Button) findViewById(R.id.buttonApi);
-        mCallApiButton.setOnClickListener(this);
-        listView=(ListView)findViewById(R.id.listView);
-
-        // Initialize credentials and service object.
-        mCredential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff());
-
-        //On creating of the Application Activity, the user is not busy, thus, busy is off
-        busy = false;
-
-        Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/IrmaTextRoundStd-SemiBold copy.ttf");
-        mCallApiButton.setTypeface(customFont);
-        audiomanager = (AudioManager)getSystemService(AUDIO_SERVICE);
-
-        getResultsFromApi();
-        actionSync();
-
-        handler.post(runnableCode);
-
-        //start the service that syncs the calendar
-        /*Intent newIntent;
-        newIntent = new Intent(this, BackgroundService.class);
-        bindService(newIntent, mConnection, BIND_AUTO_CREATE);
-        */
-
-    }
-
-    /**
      * Attempt to call the API, after verifying that all the preconditions are
      * satisfied. The preconditions are: Google Play Services installed, an
      * account was selected and the device currently has online access. If any
      * of the preconditions are not satisfied, the app will prompt the user as
      * appropriate.
      */
-
     private void getResultsFromApi() {
         if (! isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
@@ -210,6 +226,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
             chooseAccount();
         } else if (! isDeviceOnline()) {
             Log.d("Error", "Network Error");
+            Toast.makeText(MainActivity.this,"Network Error",Toast.LENGTH_LONG).show();
         } else {
             new MakeRequestTask(mCredential).execute();
         }
@@ -225,7 +242,6 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
      * function will be rerun automatically whenever the GET_ACCOUNTS permission
      * is granted.
      */
-
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
         if (EasyPermissions.hasPermissions(this, Manifest.permission.GET_ACCOUNTS)) {
@@ -486,7 +502,6 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
 
             if (output == null || output.size() == 0) {
                 String message = "No results returned.";
-                Toast.makeText(MainActivity.this,message,Toast.LENGTH_LONG).show();
             }
             else {
                 output.add(0, "Data retrieved using the Google Calendar API:");
@@ -517,22 +532,63 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         }
     }
 
+    /**
+     * Fetches data from the calendar and sets the audio profile
+     */
     void actionSync(){
-        getResultsFromApi();
-        Log.d("Busy Mode",String.valueOf(busy));
+
+        new MakeRequestTask(mCredential).execute();
+        Log.d("Busy Mode", String.valueOf(busy));
+
         //The busy boolean is set true if there is current on-going activity
         //On current on-going activity, set the audio manager ringer mode to vibrate
         if(busy){
+            if(!previousbusy) {
+                notificationThrow("Audio Profile Changed to Vibrate");
+                previousbusy=true;
+            }
             audiomanager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
         }
         //On current on-going activity, set the audio manager ringer mode to vibrate
         else if(!busy){
+            if(previousbusy) {
+                notificationThrow("Audio Profile Changed to Loud");
+                previousbusy = false;
+            }
             audiomanager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         }
     }
 
+    /**
+     * Action to be performed on clicking the Sync Button
+     */
     public void onClick(View v) {
         actionSync();
+        Toast.makeText(MainActivity.this,"Sync done!",Toast.LENGTH_LONG).show();
+    }
+
+
+    /**
+     * Notification builder function
+     * @param message The string message to be passed to the notification that is generated
+     */
+
+    void notificationThrow(String message){
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        mBuilder.setSmallIcon(R.drawable.soundless_96);
+        mBuilder.setContentTitle("Soundless Alert");
+        mBuilder.setContentText(message);
+        mBuilder.setColor(getResources().getColor(R.color.purple));
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // notificationID allows you to update the notification later on.
+        mNotificationManager.notify(notificationID, mBuilder.build());
+
     }
 
 }

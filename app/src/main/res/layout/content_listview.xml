@@ -23,10 +23,15 @@
         android:orientation="vertical">
 
     <TextView
+        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/EventName"
         android:textColor="@color/green"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="@color/purple"/>
 
     <TextView
         android:layout_width="match_parent"

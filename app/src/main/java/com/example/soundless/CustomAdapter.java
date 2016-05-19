@@ -1,8 +1,23 @@
+/**
+ * Soundless - Application that automatically changes the profile of the phone based on the Google Calendar events.
+
+ * Team Adroit -
+ *  Computer Science:
+ *    Joseph Daniels 
+ *    Kshipra Kode 
+ *    Oladipupo Eke
+ *    Mark Pileggi
+ *  Designer:
+ *    Monica Williams
+
+ * Date : 19th May 2016
+
+ **/
+
 package com.example.soundless;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,10 +25,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
+//Class that defines the custom layout of the Events in the calendar
 public class CustomAdapter extends BaseAdapter{
     List<String> eventNames;
     List<String> eventTime;
@@ -63,106 +78,109 @@ public class CustomAdapter extends BaseAdapter{
 
         View rowView;
         int date = Integer.parseInt(eventTime.get(position).substring(8, 10));
-        Log.d("date",String.valueOf(date));
+
 
         rowView = inflater.inflate(R.layout.content_listview, null);
         ImageView imageIcon = (ImageView) rowView.findViewById(R.id.iconCalender);
+        //Depending on the date, the events are given an individual icon
         switch(date){
             case 1:
                 imageIcon.setImageResource(R.drawable.cal_01);
                 break;
             case 2:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_02);
                 break;
             case 3:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_03);
                 break;
             case 4:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_04);
                 break;
             case 5:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_05);
                 break;
             case 6:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_06);
                 break;
             case 7:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_07);
                 break;
             case 8:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_08);
                 break;
             case 9:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_09);
                 break;
             case 10:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_10);
                 break;
             case 11:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_11);
                 break;
             case 12:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_12);
                 break;
             case 13:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_13);
                 break;
             case 14:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_14);
                 break;
             case 15:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_15);
                 break;
             case 16:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_16);
                 break;
             case 17:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_17);
                 break;
             case 18:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_18);
                 break;
             case 19:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_19);
                 break;
             case 20:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_20);
                 break;
             case 21:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_21);
                 break;
             case 22:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_22);
                 break;
             case 23:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_23);
                 break;
             case 24:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_24);
                 break;
             case 25:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_25);
                 break;
             case 26:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_26);
                 break;
             case 27:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_27);
                 break;
             case 28:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_28);
                 break;
             case 29:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_29);
                 break;
             case 30:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_30);
                 break;
             case 31:
-                imageIcon.setImageResource(R.drawable.cal_01);
+                imageIcon.setImageResource(R.drawable.cal_31);
                 break;
 
         }
+
+        //Setting the events Name, Location, Timings
         holder.name=(TextView) rowView.findViewById(R.id.EventName);
         holder.location=(TextView) rowView.findViewById(R.id.EventLocation);
         holder.time=(TextView) rowView.findViewById(R.id.EventTime);
@@ -170,15 +188,14 @@ public class CustomAdapter extends BaseAdapter{
         holder.name.setText(eventNames.get(position));
 
         if(eventTime.get(position)!=null)
-        holder.time.setText(eventTime.get(position));
+        holder.time.setText("From: " + eventTime.get(position));
         holder.location.setText(eventLocations.get(position));
-        holder.timeEnd.setText(eventTimeEnd.get(position));
+        holder.timeEnd.setText("To: " + eventTimeEnd.get(position));
 
         rowView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Toast.makeText(context, "You Clicked " + eventNames.get(position), Toast.LENGTH_LONG).show();
+
             }
         });
         return rowView;
